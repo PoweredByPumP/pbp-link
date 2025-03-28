@@ -1,3 +1,7 @@
+import ChatHeader from "../../components/ChatHeader";
+
 export default function HomePage() {
-    return (<p>Salut !</p>)
+    return (
+        <ChatHeader/>
+    );
 }

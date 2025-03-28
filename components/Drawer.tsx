@@ -1,17 +1,19 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { useRouter, usePathname } from "expo-router";
+import {DrawerContentScrollView, DrawerNavigationProp} from "@react-navigation/drawer";
+import {useRouter, usePathname, useNavigation} from "expo-router";
+import {DrawerNavigationHelpers} from "@react-navigation/drawer/src/types";
 
 type Props = {
+    navigation: DrawerNavigationHelpers;
     isDesktop: boolean;
     collapsed: boolean;
     setCollapsed: (val: boolean | ((prev: boolean) => boolean)) => void;
 };
 
 export default function DrawerContent(props: Props) {
-    const { isDesktop, collapsed, setCollapsed } = props;
+    const { navigation, isDesktop, collapsed, setCollapsed } = props;
     const router = useRouter();
     const pathname = usePathname(); // Récupère le chemin courant
 
@@ -32,7 +34,14 @@ export default function DrawerContent(props: Props) {
                     styles.navItem,
                     pathname.startsWith("/chat") && styles.activeNavItem,
                 ]}
-                onPress={() => !pathname.startsWith("/chat") && router.push("/chat/home")}
+                onPress={() => {
+                    if (!pathname.startsWith("/chat")) {
+                        navigation.jumpTo("chat")
+                        navigation.openDrawer()
+                    } else if (!isDesktop) {
+                        navigation.closeDrawer()
+                    }
+                }}
             >
                 <Ionicons name="chatbubbles" size={24} color="#666" />
                 {!collapsed && <Text style={styles.navText}>Chats</Text>}
@@ -44,10 +53,17 @@ export default function DrawerContent(props: Props) {
                     styles.navItem,
                     pathname.startsWith("/groups") && styles.activeNavItem,
                 ]}
-                onPress={() => !pathname.startsWith("/groups") && router.push("/groups/home")}
+                onPress={() => {
+                    if (!pathname.startsWith("/groups")) {
+                        navigation.jumpTo("groups")
+                        navigation.openDrawer()
+                    } else if (!isDesktop) {
+                        navigation.closeDrawer()
+                    }
+                }}
             >
                 <Ionicons name="people" size={24} color="#666" />
-                {!collapsed && <Text style={styles.navText}>Groups</Text>}
+                {!collapsed && <Text style={styles.navText}>Groupes</Text>}
             </TouchableOpacity>
         </DrawerContentScrollView>
     );
@@ -56,7 +72,8 @@ export default function DrawerContent(props: Props) {
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-        paddingTop: 24,
+        paddingTop: 50,
+        paddingBottom: 50
     },
     profileContainer: {
         alignItems: "center",

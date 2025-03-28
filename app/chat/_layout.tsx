@@ -2,7 +2,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import HomeScreen from "./home";
+import ChatHome from "./home";
 import SettingsScreen from "./settings";
 
 const Tab = createBottomTabNavigator();
@@ -20,11 +20,12 @@ export default function ChatLayout() {
                     }
                     return null;
                 },
+                tabBarStyle: { display: "none" },
             })}
         >
             <Tab.Screen
                 name="home"
-                component={HomeScreen}
+                component={ChatHome}
                 options={{ tabBarLabel: "Accueil" }}
             />
             <Tab.Screen

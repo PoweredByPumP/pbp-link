@@ -14,7 +14,6 @@ const COLLAPSED_WIDTH = 64;
 export default function Layout() {
     const { width } = useWindowDimensions();
     const isDesktop = width >= 1420;
-    console.log(width);
 
     // État local pour le collapse du drawer
     const [collapsed, setCollapsed] = useState(false);
@@ -29,25 +28,25 @@ export default function Layout() {
     return (
         <DrawerNav.Navigator
             screenOptions={{
-                drawerType: isDesktop ? "permanent" : "slide",
+                drawerType: isDesktop ? "permanent" : "front",
                 drawerStyle: {
-                    width: isDesktop ? (collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH) : undefined,
+                    width: isDesktop ? EXPANDED_WIDTH : undefined,
                 },
                 swipeEnabled: !isDesktop,
-                headerTitle: "Chat",
                 headerLeft: () => !isDesktop ? (<DrawerToggleButton />) : undefined,
             }}
             drawerContent={(props) => (
                 <DrawerContent
                     {...props}
+                    navigation={props.navigation}
                     isDesktop={isDesktop}
                     collapsed={collapsed}
                     setCollapsed={setCollapsed}
                 />
             )}
         >
-            <DrawerNav.Screen name="chat" component={ChatLayout} />
-            <DrawerNav.Screen name="groups" component={GroupsLayout} />
+            <DrawerNav.Screen name="chat" component={ChatLayout} options={{ title: "Chats" }} />
+            <DrawerNav.Screen name="groups" component={GroupsLayout} options={{ title: "Groupes" }} />
         </DrawerNav.Navigator>
     );
 }
