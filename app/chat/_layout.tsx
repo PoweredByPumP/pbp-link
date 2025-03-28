@@ -1,38 +1,46 @@
-// app/chat/_layout.tsx
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChatHome from "./home";
+import ConversationScreen from "./conversation";
 import SettingsScreen from "./settings";
+import { useTheme } from "../../components/ThemeContext";
 
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function ChatLayout() {
+    const { theme } = useTheme();
+
     return (
-        <Tab.Navigator
-            screenOptions={({ route }) => ({
-                headerShown: false,
-                tabBarIcon: ({ color, size }) => {
-                    if (route.name === "home") {
-                        return <Ionicons name="chatbubbles" size={size} color={color} />;
-                    } else if (route.name === "settings") {
-                        return <Ionicons name="settings" size={size} color={color} />;
-                    }
-                    return null;
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: theme.drawer.headerBackground,
                 },
-                tabBarStyle: { display: "none" },
-            })}
+                headerTintColor: theme.drawer.text,
+                headerTitleStyle: {
+                    fontFamily: "SpaceMono",
+                },
+                headerShown: false,
+                contentStyle: {
+                    backgroundColor: theme.background,
+                },
+            }}
         >
-            <Tab.Screen
+            <Stack.Screen
                 name="home"
                 component={ChatHome}
-                options={{ tabBarLabel: "Accueil" }}
+                options={{ title: "Conversations" }}
             />
-            <Tab.Screen
+            <Stack.Screen
+                name="conversation"
+                component={ConversationScreen}
+                options={{ title: "Discussion" }}
+            />
+            <Stack.Screen
                 name="settings"
                 component={SettingsScreen}
-                options={{ tabBarLabel: "Paramètres" }}
+                options={{ title: "Paramètres" }}
             />
-        </Tab.Navigator>
+        </Stack.Navigator>
     );
 }

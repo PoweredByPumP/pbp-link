@@ -1,72 +1,71 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     View,
     Text,
-    StyleSheet,
     FlatList,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
+    TouchableOpacity,
+    StyleSheet,
 } from "react-native";
-import ChatInput from "../../components/ChatInput";
+import { useTheme } from "../../components/ThemeContext";
+import { useNavigation } from "@react-navigation/native";
 
-type Message = {
-    id: string;
-    content: string;
-    // ... autres champs si besoin (auteur, date, etc.)
-};
+const conversations = [
+    { id: "1", name: "Alice" },
+    { id: "2", name: "Bob" },
+    { id: "3", name: "Charlie" },
+    { id: "4", name: "Julien" },
+    { id: "5", name: "Support" },
+];
 
 export default function ChatHome() {
-    const [messages, setMessages] = useState<Message[]>([]);
-
-    const handleSendMessage = (newMessage: string) => {
-        const msg: Message = {
-            id: Date.now().toString(),
-            content: newMessage,
-        };
-        setMessages((prev) => [...prev, msg]);
-    };
+    const { theme } = useTheme();
+    const navigation = useNavigation();
 
     return (
-        <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
-        >
-            <SafeAreaView style={styles.container}>
-                {/* Zone d’affichage des messages */}
-                <FlatList
-                    data={messages}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <View style={styles.messageBubble}>
-                            <Text>{item.content}</Text>
-                        </View>
-                    )}
-                    style={styles.messageList}
-                />
-
-                {/* Barre de saisie en bas */}
-                <ChatInput onSend={handleSendMessage} />
-            </SafeAreaView>
-        </KeyboardAvoidingView>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
+            <FlatList
+                data={conversations}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={styles.list}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        style={[styles.item, { backgroundColor: theme.inputBackground }]}
+                        onPress={() =>
+                            navigation.navigate("conversation" as never, { id: item.id } as never)
+                        }
+                    >
+                        <Text style={[styles.name, { color: theme.text }]}>
+                            {item.name}
+                        </Text>
+                    </TouchableOpacity>
+                )}
+            />
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 24,
+        paddingHorizontal: 16,
     },
-    messageList: {
-        flex: 1,
-        padding: 8,
+    title: {
+        fontSize: 20,
+        fontWeight: "bold",
+        fontFamily: "SpaceMono",
+        marginBottom: 16,
     },
-    messageBubble: {
-        backgroundColor: "#e5e5e5",
+    list: {
+        gap: 12,
+    },
+    item: {
+        paddingVertical: 16,
+        paddingHorizontal: 12,
         borderRadius: 8,
-        padding: 12.5,
-        marginBottom: 8,
-        alignSelf: "flex-start",
-        maxWidth: "80%",
+    },
+    name: {
+        fontSize: 16,
+        fontFamily: "SpaceMono",
     },
 });

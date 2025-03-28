@@ -1,23 +1,25 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import {View, Text, StyleSheet, Platform} from "react-native";
+import { useTheme } from "./ThemeContext";
 
-export default function ChatHeader() {
+export default function ChatHeader({ title }: { title: string }) {
+  const { theme } = useTheme();
+
   return (
-      <View style={styles.header}>
-        <Text style={styles.text}>John Doe</Text>
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
       </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+  container: {
+    padding: 16,
+    borderBottomWidth: 1,
   },
-  text: {
-    fontWeight: 'bold',
-    fontSize: 16,
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    fontFamily: Platform.OS === "ios" ? "System" : "sans-serif",
   },
 });
