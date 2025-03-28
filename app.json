@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "pbp-link",
+    "slug": "pbp-link",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "pbplink",
+    "platforms": ["ios", "android", "web"],
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "build": {
+        "babel": {}
+      },
+      "manifest": {
+        "name": "pbp-link",
+        "short_name": "pbp-link",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#ffffff",
+        "theme_color": "#000000",
+        "description": "Application PWA pbp-link avec Drawer et Bottom Tabs"
+      }
+    }
+  }
+}
